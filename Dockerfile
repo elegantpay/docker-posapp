@@ -5,7 +5,7 @@ FROM ubuntu:14.04
 MAINTAINER yinheli <me@yinheli.com>
 
 ## install wget tar git sshd
-RUN apt-get install -y wget tar git openssh-server
+RUN apt-get install -y wget tar git openssh-server supervisor
 
 
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
@@ -43,11 +43,7 @@ RUN . ~/.nvm/nvm.sh && \
     nvm alias default 0.10.32
 
 
-### install supervisord
-
-RUN apt-get install -y python-setuptools && easy_install pip && pip install supervisor
-
-COPY supervisord.conf /etc/supervisord.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 
 ### other ###
