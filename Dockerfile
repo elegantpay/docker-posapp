@@ -5,22 +5,15 @@ FROM ubuntu:14.04
 MAINTAINER yinheli <me@yinheli.com>
 
 ## install wget tar sshd
-RUN apt-get install -y wget tar openssh-server
+RUN apt-get install -y wget tar git openssh-server
 
-RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
-    ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
 
-# fix the 254 error code
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
-    sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
-
-# default password
-RUN /bin/echo 'root:henry!123qwe'|chpasswd
-
-# install git
-RUN yum install -y git
-
-
+    sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config && \
+    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd && \
+    echo "export VISIBLE=now" >> /etc/profile && \
+    /bin/echo 'root:henry!123qwe'|chpasswd
 
 ### install java ###
 
@@ -40,7 +33,6 @@ RUN wget --progress=bar --no-check-certificate \
 ENV JAVA_HOME /usr/local/jdk
 
 
-
 ### install node.js ###
 
 RUN rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && \
@@ -49,7 +41,6 @@ RUN source ~/.nvm/nvm.sh && \
     echo 'source ~/.nvm/nvm.sh' >> ~/.bash_profile && \
     nvm install v0.10.32 && \
     nvm alias default 0.10.32
-
 
 
 ### install supervisord
