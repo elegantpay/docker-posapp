@@ -1,16 +1,11 @@
-# app server, base centos6
+# app server, base ubuntu
 # include sshd, java, node.js, supervisord
 
 FROM centos:6
 MAINTAINER yinheli <me@yinheli.com>
 
-# install base util
-RUN yum install -y wget tar
-
-### install sshd ###
-
-# install sshd
-RUN yum install -y openssh-server openssh-clients
+## install wget tar sshd
+RUN apt-get install -y wget tar openssh-server
 
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key && \
     ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
@@ -59,7 +54,7 @@ RUN source ~/.nvm/nvm.sh && \
 
 ### install supervisord
 
-RUN yum install -y python-setuptools && easy_install pip && pip install supervisor
+RUN apt-get install -y python-setuptools && easy_install pip && pip install supervisor
 
 COPY supervisord.conf /etc/supervisord.conf
 
@@ -67,7 +62,7 @@ COPY supervisord.conf /etc/supervisord.conf
 ### other ###
 
 # set env
-ENV PATH $PATH:$JAVA_HOME/bin
+ENV PATH $PATH:\$JAVA_HOME/bin
 
 EXPOSE 22
 
