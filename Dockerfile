@@ -5,7 +5,7 @@ FROM ubuntu:14.04
 MAINTAINER yinheli <me@yinheli.com>
 
 ## install wget tar git sshd
-RUN apt-get update && apt-get install -y wget tar git openssh-server supervisor
+RUN apt-get update && apt-get install -y wget tar git openssh-server supervisor && apt-get clean
 
 
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
