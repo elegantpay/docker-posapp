@@ -4,7 +4,7 @@
 FROM ubuntu:14.04
 MAINTAINER yinheli <me@yinheli.com>
 
-## install wget tar sshd
+## install wget tar git sshd
 RUN apt-get install -y wget tar git openssh-server
 
 
