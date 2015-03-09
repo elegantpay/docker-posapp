@@ -37,8 +37,8 @@ ENV JAVA_HOME /usr/local/jdk
 
 RUN rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && \
     cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`
-RUN source ~/.nvm/nvm.sh && \
-    echo 'source ~/.nvm/nvm.sh' >> ~/.bash_profile && \
+RUN . ~/.nvm/nvm.sh && \
+    echo '. ~/.nvm/nvm.sh' >> ~/.bash_profile && \
     nvm install v0.10.32 && \
     nvm alias default 0.10.32
 
