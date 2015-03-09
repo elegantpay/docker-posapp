@@ -4,20 +4,25 @@
 FROM ubuntu:14.04
 MAINTAINER yinheli <me@yinheli.com>
 
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 ## install wget tar git sshd
-RUN apt-get update && apt-get install -y wget tar git openssh-server supervisor && apt-get clean
+RUN apt-get update && apt-get install -y curl wget tar git openssh-server supervisor && apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
     sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd && \
-    echo "export VISIBLE=now" >> /etc/profile && \
-    /bin/echo 'root:henry!123qwe'|chpasswd
+    mkdir /var/run/sshd && \
+    /bin/echo 'root:henry!123qwe'|chpasswd && \
+    locale-gen en_US.UTF-8 && update-locale en_US.UTF-8
+
 
 ### install java ###
 
-# download && install java
+download && install java
 RUN wget --progress=bar --no-check-certificate \
     -O /tmp/jdk.tar.gz \
     --header "Cookie: oraclelicense=a" \
@@ -35,12 +40,17 @@ ENV JAVA_HOME /usr/local/jdk
 
 ### install node.js ###
 
+ENV NODE_VERSION 0.10.33
+ENV NODE_ENV  production
+
+# Install nvm with node and npm
 RUN rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && \
-    cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`
-RUN . ~/.nvm/nvm.sh && \
-    echo '. ~/.nvm/nvm.sh' >> ~/.bash_profile && \
-    nvm install v0.10.32 && \
-    nvm alias default 0.10.32
+    cd ~/.nvm && git checkout `git describe --abbrev=0 --tags` && \
+    source ~/.nvm/nvm.sh && \
+    echo 'source ~/.nvm/nvm.sh' >> ~/.bash_profile && \
+    nvm install $NODE_VERSION && \
+    nvm alias default $NODE_VERSION && \
+    npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
