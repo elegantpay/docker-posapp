@@ -1,7 +1,7 @@
 # app server, base ubuntu
 # include sshd, java, node.js, supervisord
 
-FROM centos:6
+FROM ubuntu:14.04
 MAINTAINER yinheli <me@yinheli.com>
 
 ## install wget tar sshd
