@@ -7,14 +7,16 @@ MAINTAINER yinheli <me@yinheli.com>
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 ## install wget tar git sshd
-RUN apt-get update && apt-get install -y curl wget tar git openssh-server supervisor && apt-get clean && \
+RUN apt-get update && apt-get install -y \
+    curl vim iptables telnet wget tar make gcc git openssh-server supervisor && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
-RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
     sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd && \
+    sed -i 's/session\s*required\s*pam_loginuid.so/session optional pam_loginuid.so/g' /etc/pam.d/sshd && \
     mkdir /var/run/sshd && \
     /bin/echo 'root:henry!123qwe'|chpasswd && \
     locale-gen en_US.UTF-8 && update-locale en_US.UTF-8
