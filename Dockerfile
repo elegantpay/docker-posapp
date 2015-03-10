@@ -24,7 +24,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 
 ### install java ###
 
-download && install java
+# download && install java
 RUN wget --progress=bar --no-check-certificate \
     -O /tmp/jdk.tar.gz \
     --header "Cookie: oraclelicense=a" \
