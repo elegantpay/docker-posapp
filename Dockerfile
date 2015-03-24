@@ -42,7 +42,7 @@ ENV JAVA_HOME /usr/local/jdk
 
 ### install node.js ###
 
-ENV NODE_VERSION 0.10.33
+ENV NODE_VERSION 0.12.0
 ENV NODE_ENV production
 
 # Install nvm with node and npm
