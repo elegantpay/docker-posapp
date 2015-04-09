@@ -8,7 +8,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 ## install wget tar git sshd
 RUN apt-get update && apt-get install -y \
-    curl vim iptables ufw telnet wget tar mysql-server make gcc git openssh-server supervisor && apt-get clean && \
+    curl vim iptables ufw telnet wget tar mysql-server make gcc g++ git openssh-server supervisor && apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
