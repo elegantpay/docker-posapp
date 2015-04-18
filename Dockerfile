@@ -18,7 +18,6 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i 's/session\s*required\s*pam_loginuid.so/session optional pam_loginuid.so/g' /etc/pam.d/sshd && \
     mkdir /var/run/sshd && \
-    /bin/echo 'root:henry!123qwe'|chpasswd && \
     locale-gen en_US.UTF-8 && update-locale en_US.UTF-8
 
 
